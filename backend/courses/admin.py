@@ -12,9 +12,10 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "category", "price", "is_active", "is_deleted", "created_at")
+    list_display = ("id", "order", "title", "category", "level", "price", "is_active", "is_deleted", "created_at")
     list_filter = ("is_active", "is_deleted", "category")
-    search_fields = ("title", "short_description")
+    search_fields = ("title", "slug", "short_description", "focus_keyword")
+    prepopulated_fields = {"slug": ("title",)}
 
 
 @admin.register(Enrollment)

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils.text import slugify
 
 
 class Category(models.Model):
@@ -19,8 +20,21 @@ class Category(models.Model):
 class Course(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="courses")
     title = models.CharField(max_length=255, db_index=True)
+    slug = models.SlugField(max_length=280, unique=True, blank=True)
     short_description = models.CharField(max_length=255)
     description = models.TextField()
+    order = models.PositiveSmallIntegerField(default=100, db_index=True)
+    level = models.CharField(max_length=80, default="Beginner to Intermediate")
+    language = models.CharField(max_length=80, default="English")
+    prerequisites = models.TextField(blank=True)
+    learning_outcomes = models.JSONField(default=list, blank=True)
+    career_opportunities = models.JSONField(default=list, blank=True)
+    seo_title = models.CharField(max_length=255, blank=True)
+    meta_description = models.CharField(max_length=320, blank=True)
+    focus_keyword = models.CharField(max_length=120, blank=True)
+    tags = models.JSONField(default=list, blank=True)
+    featured_image = models.CharField(max_length=500, blank=True)
+    images = models.JSONField(default=list, blank=True)
     duration_days = models.PositiveSmallIntegerField(
         default=30,
         help_text="Estimated learning plan duration in days.",
@@ -41,11 +55,33 @@ class Course(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["order", "-created_at"]
         indexes = [
             models.Index(fields=["title"]),
+            models.Index(fields=["slug"]),
+            models.Index(fields=["order", "is_active"]),
             models.Index(fields=["is_deleted", "is_active"]),
         ]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self._build_unique_slug()
+        if not self.featured_image and self.image:
+            self.featured_image = self.image.name
+        super().save(*args, **kwargs)
+
+    def _build_unique_slug(self):
+        base = slugify(self.title)[:240] or "sia-course"
+        slug = base
+        counter = 2
+        queryset = Course.objects.all()
+        if self.pk:
+            queryset = queryset.exclude(pk=self.pk)
+        while queryset.filter(slug=slug).exists():
+            suffix = f"-{counter}"
+            slug = f"{base[: 280 - len(suffix)]}{suffix}"
+            counter += 1
+        return slug
 
     def __str__(self) -> str:
         return self.title

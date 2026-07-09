@@ -28,6 +28,13 @@ const resolvedApiBaseUrl =
       : LOCAL_API_BASE_URL;
 
 export const API_BASE_URL = resolvedApiBaseUrl.replace(/\/+$/, "");
+export const API_ORIGIN_URL = (() => {
+  try {
+    return new URL(API_BASE_URL).origin;
+  } catch {
+    return API_BASE_URL.replace(/\/api\/?$/, "");
+  }
+})();
 
 const api = axios.create({
   baseURL: API_BASE_URL,

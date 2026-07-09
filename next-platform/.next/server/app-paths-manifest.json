@@ -1,0 +1,11 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/courses/page": "app/admin/courses/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/admin/courses/[id]/route": "app/api/admin/courses/[id]/route.js",
+  "/api/admin/courses/route": "app/api/admin/courses/route.js",
+  "/api/admin/upload/route": "app/api/admin/upload/route.js",
+  "/courses/[slug]/page": "app/courses/[slug]/page.js",
+  "/page": "app/page.js"
+}

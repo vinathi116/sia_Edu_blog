@@ -82,6 +82,15 @@ const EMPTY_FORM = {
   title: "",
   short_description: "",
   description: "",
+  level: "Beginner to Intermediate",
+  language: "English",
+  prerequisites: "",
+  learning_outcomes: "",
+  career_opportunities: "",
+  seo_title: "",
+  meta_description: "",
+  focus_keyword: "",
+  tags: "",
   duration_days: "30",
   price: "",
   final_price: "",
@@ -100,6 +109,15 @@ function toCourseForm(course) {
     title: course.title || "",
     short_description: course.short_description || "",
     description: course.description || "",
+    level: course.level || "Beginner to Intermediate",
+    language: course.language || "English",
+    prerequisites: course.prerequisites || "",
+    learning_outcomes: Array.isArray(course.learning_outcomes) ? course.learning_outcomes.join("\n") : "",
+    career_opportunities: Array.isArray(course.career_opportunities) ? course.career_opportunities.join("\n") : "",
+    seo_title: course.seo_title || "",
+    meta_description: course.meta_description || "",
+    focus_keyword: course.focus_keyword || "",
+    tags: Array.isArray(course.tags) ? course.tags.join("\n") : "",
     duration_days: String(course.duration_days ?? "30"),
     price: String(price),
     final_price: String(finalPrice),
@@ -119,6 +137,13 @@ function firstApiError(error, fallback) {
   return firstMessage ? String(firstMessage) : fallback;
 }
 
+function linesToArray(value) {
+  return String(value || "")
+    .split(/\r?\n|,/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 function buildCoursePayload(form) {
   const price = normalizeMoneyNumber(form.price);
   const finalPrice = normalizeFinalPrice(price, form.final_price);
@@ -128,6 +153,15 @@ function buildCoursePayload(form) {
   payload.append("title", form.title.trim());
   payload.append("short_description", form.short_description.trim());
   payload.append("description", form.description.trim());
+  payload.append("level", form.level.trim() || "Beginner to Intermediate");
+  payload.append("language", form.language.trim() || "English");
+  payload.append("prerequisites", form.prerequisites.trim());
+  payload.append("learning_outcomes", JSON.stringify(linesToArray(form.learning_outcomes)));
+  payload.append("career_opportunities", JSON.stringify(linesToArray(form.career_opportunities)));
+  payload.append("seo_title", form.seo_title.trim());
+  payload.append("meta_description", form.meta_description.trim());
+  payload.append("focus_keyword", form.focus_keyword.trim());
+  payload.append("tags", JSON.stringify(linesToArray(form.tags)));
   payload.append("duration_days", String(form.duration_days || "30").trim());
   payload.append("price", String(price));
   payload.append("final_price", String(finalPrice));
@@ -194,6 +228,54 @@ function InlineCourseForm({
           value={form.description}
           onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
           required
+        />
+      </InlineField>
+
+      <InlineField label="Level">
+        <input
+          aria-label="Level"
+          placeholder="Beginner to Intermediate"
+          value={form.level}
+          onChange={(event) => setForm((prev) => ({ ...prev, level: event.target.value }))}
+        />
+      </InlineField>
+
+      <InlineField label="Language">
+        <input
+          aria-label="Language"
+          placeholder="English"
+          value={form.language}
+          onChange={(event) => setForm((prev) => ({ ...prev, language: event.target.value }))}
+        />
+      </InlineField>
+
+      <InlineField label="Prerequisites" className="table-inline-field-wide">
+        <textarea
+          aria-label="Prerequisites"
+          placeholder="One prerequisite per line"
+          rows={3}
+          value={form.prerequisites}
+          onChange={(event) => setForm((prev) => ({ ...prev, prerequisites: event.target.value }))}
+        />
+      </InlineField>
+
+      <InlineField label="Learning Outcomes" className="table-inline-field-wide">
+        <textarea
+          aria-label="Learning Outcomes"
+          placeholder="One outcome per line"
+          rows={4}
+          value={form.learning_outcomes}
+          onChange={(event) => setForm((prev) => ({ ...prev, learning_outcomes: event.target.value }))}
+        />
+      </InlineField>
+
+      <InlineField label="Career Opportunities" className="table-inline-field-wide">
+        <textarea
+          aria-label="Career Opportunities"
+          placeholder="One career path per line"
+          rows={3}
+          value={form.career_opportunities}
+          onChange={(event) => setForm((prev) => ({ ...prev, career_opportunities: event.target.value }))}
         />
       </InlineField>
 
@@ -279,6 +361,44 @@ function InlineCourseForm({
             </option>
           ))}
         </select>
+      </InlineField>
+
+      <InlineField label="SEO Title" className="table-inline-field-wide">
+        <input
+          aria-label="SEO Title"
+          placeholder="SEO Title"
+          value={form.seo_title}
+          onChange={(event) => setForm((prev) => ({ ...prev, seo_title: event.target.value }))}
+        />
+      </InlineField>
+
+      <InlineField label="Meta Description" className="table-inline-field-wide">
+        <textarea
+          aria-label="Meta Description"
+          placeholder="Meta description"
+          rows={3}
+          value={form.meta_description}
+          onChange={(event) => setForm((prev) => ({ ...prev, meta_description: event.target.value }))}
+        />
+      </InlineField>
+
+      <InlineField label="Focus Keyword">
+        <input
+          aria-label="Focus Keyword"
+          placeholder="Focus keyword"
+          value={form.focus_keyword}
+          onChange={(event) => setForm((prev) => ({ ...prev, focus_keyword: event.target.value }))}
+        />
+      </InlineField>
+
+      <InlineField label="Tags" className="table-inline-field-wide">
+        <textarea
+          aria-label="Tags"
+          placeholder="One tag per line"
+          rows={3}
+          value={form.tags}
+          onChange={(event) => setForm((prev) => ({ ...prev, tags: event.target.value }))}
+        />
       </InlineField>
 
       <InlineField label="Course Status" className="table-inline-field-toggle">

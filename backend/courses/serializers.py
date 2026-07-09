@@ -53,8 +53,21 @@ class CourseSerializer(serializers.ModelSerializer):
             "category",
             "category_id",
             "title",
+            "slug",
             "short_description",
             "description",
+            "order",
+            "level",
+            "language",
+            "prerequisites",
+            "learning_outcomes",
+            "career_opportunities",
+            "seo_title",
+            "meta_description",
+            "focus_keyword",
+            "tags",
+            "featured_image",
+            "images",
             "duration_days",
             "price",
             "final_price",
@@ -92,6 +105,39 @@ class CourseSerializer(serializers.ModelSerializer):
             discount_percent = ((price - normalized_final) * Decimal("100")) / price
             attrs["discount_percent"] = max(Decimal("0.00"), min(Decimal("100.00"), discount_percent.quantize(Decimal("0.01"))))
         return attrs
+
+    @staticmethod
+    def _normalize_string_list(value):
+        if value in (None, ""):
+            return []
+        if isinstance(value, list):
+            return [str(item).strip() for item in value if str(item).strip()]
+        if isinstance(value, str):
+            import json
+
+            try:
+                parsed = json.loads(value)
+            except json.JSONDecodeError:
+                parsed = [item.strip() for item in value.replace(",", "\n").splitlines()]
+            if isinstance(parsed, list):
+                return [str(item).strip() for item in parsed if str(item).strip()]
+        raise serializers.ValidationError("Expected a list of text values.")
+
+    def validate_learning_outcomes(self, value):
+        return self._normalize_string_list(value)
+
+    def validate_career_opportunities(self, value):
+        return self._normalize_string_list(value)
+
+    def validate_tags(self, value):
+        return self._normalize_string_list(value)
+
+    def validate_images(self, value):
+        if not value:
+            return []
+        if not isinstance(value, list):
+            raise serializers.ValidationError("Expected a list of image objects.")
+        return value
 
     def get_average_rating(self, obj):
         cached = getattr(obj, "avg_rating", None)

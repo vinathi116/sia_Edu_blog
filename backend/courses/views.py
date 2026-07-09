@@ -123,7 +123,7 @@ def _ordered_course_queryset(queryset):
             default=Value(1),
             output_field=IntegerField(),
         )
-    ).order_by("pinned_order", "-created_at")
+    ).order_by("pinned_order", "order", "-created_at")
 
 
 def _log_admin_action(user, action: str, target_type: str, target_id: str, details: str = ""):

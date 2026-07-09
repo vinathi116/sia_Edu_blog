@@ -426,7 +426,8 @@
 }
 
 .course-image-wrap {
-  height: 168px;
+  aspect-ratio: 16 / 9;
+  min-height: 0;
   background: var(--bg-elevated);
 }
 

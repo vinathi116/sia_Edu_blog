@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#07111f"/>
+  <circle cx="290" cy="360" r="120" fill="#3ddcff" fill-opacity="0.25" stroke="#3ddcff" stroke-width="10"/>
+  <circle cx="900" cy="360" r="120" fill="#7b61ff" fill-opacity="0.25" stroke="#7b61ff" stroke-width="10"/>
+  <path d="M410 360 L780 360" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
+  <path d="M600 250 L600 470" stroke="#3ddcff" stroke-width="10" stroke-linecap="round"/>
+  <text x="160" y="95" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Future Quantum Ecosystem</text>
+</svg>

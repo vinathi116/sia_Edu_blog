@@ -35,6 +35,10 @@ export default function VerifyEmail() {
   }, [searchParams, user?.email]);
 
   const handleVerify = async (event) => {
+
+
+
+    
     event.preventDefault();
     setVerifying(true);
     try {

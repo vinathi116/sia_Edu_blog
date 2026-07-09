@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">HDQS quantum processor illustration</title>
+  <desc id="desc">A blue neon quantum processor with orbital qubit paths on a dark futuristic background.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="70%"><stop stop-color="#123d7a"/><stop offset=".45" stop-color="#071427"/><stop offset="1" stop-color="#02050a"/></radialGradient>
+    <linearGradient id="chip" x1="0" x2="1"><stop stop-color="#0b1b35"/><stop offset=".5" stop-color="#163a70"/><stop offset="1" stop-color="#081225"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <g opacity=".22" stroke="#60a5fa"><path d="M0 600h1280M0 520h1280M0 440h1280M0 360h1280M0 280h1280"/><path d="M120 0v720M280 0v720M440 0v720M600 0v720M760 0v720M920 0v720M1080 0v720"/></g>
+  <g transform="translate(640 360)" filter="url(#glow)">
+    <ellipse rx="410" ry="150" fill="none" stroke="#38bdf8" stroke-width="3" opacity=".7"/>
+    <ellipse rx="410" ry="150" fill="none" stroke="#60a5fa" stroke-width="3" opacity=".55" transform="rotate(60)"/>
+    <ellipse rx="410" ry="150" fill="none" stroke="#93c5fd" stroke-width="3" opacity=".45" transform="rotate(120)"/>
+    <rect x="-230" y="-150" width="460" height="300" rx="34" fill="url(#chip)" stroke="#60a5fa" stroke-width="3"/>
+    <g fill="none" stroke="#93c5fd" stroke-width="8" stroke-linecap="round">
+      <path d="M-150 -70h80v140h140v-140h80"/>
+      <path d="M-150 0h300"/>
+      <path d="M-70 -70v-55M70 70v55M0 -140v280"/>
+    </g>
+    <g fill="#bfdbfe"><circle r="14" cx="-150" cy="-70"/><circle r="14" cx="-70" cy="70"/><circle r="14" cx="70" cy="-70"/><circle r="14" cx="150" cy="70"/><circle r="18" cx="0" cy="0"/></g>
+  </g>
+  <text x="64" y="104" fill="#e0f2fe" font-family="Sora, Arial" font-size="42" font-weight="700">HDQS Quantum Lab</text>
+  <text x="66" y="154" fill="#93c5fd" font-family="Plus Jakarta Sans, Arial" font-size="24">Hybrid discrete quantum systems</text>
+</svg>

@@ -13,36 +13,23 @@ import PageTransition from "../components/PageTransition";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import MainLayout from "../layouts/MainLayout";
+import BlogCard from "../components/blog/BlogCard";
+import { blogService, unwrapList } from "../services/blogService";
 import { courseService } from "../services/courseService";
-import { getCourseImageUrl } from "../data/courseImages";
+import { getCourseHeroImageUrl, getCourseImageUrl, getCourseSectionImages } from "../data/courseImages";
 import { getCourseStartLabel } from "../data/featuredCourse";
 import "./CourseDetails.css";
 
 const DESCRIPTION_PREVIEW_LIMIT = 620;
+const ADVANCED_QUANTUM_SLUG = "advanced-quantum-computing-using-hdqs";
+const MODULE_ARTICLE_SLUG_PREFIX = "advanced-quantum-computing-module-";
+const PROJECT_ARTICLE_SLUG = "advanced-quantum-computing-projects";
 
 const DEFAULT_CURRICULUM = [
   "Module 1: Foundations, notation, and problem framing",
   "Module 2: Applied implementation with guided labs",
   "Module 3: Evaluation, optimization, and reliability checks",
   "Module 4: Capstone delivery and skill assessment",
-];
-
-const HARD_CODED_LEARNING_OUTCOMES = [
-  "Mathematically represent and manipulate quantum states.",
-  "Construct and execute multi-qubit quantum circuits.",
-  "Analyze quantum measurement distributions and expectation values.",
-  "Implement and interpret standard quantum algorithms.",
-  "Develop parameterized quantum circuits for optimization problems.",
-  "Apply hybrid quantum-classical computational models.",
-  "Utilize the HDQS platform for structured experimentation and project development.",
-];
-
-const HARD_CODED_CAPSTONE = [
-  "Design and implement a structured quantum circuit.",
-  "Define a Hamiltonian or optimization objective.",
-  "Execute parameter optimization.",
-  "Analyze results using measurement statistics.",
-  "Submit a formal technical project report.",
 ];
 
 function uniqueItems(items, max = 8) {
@@ -150,6 +137,8 @@ export default function CourseDetails() {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [moduleArticles, setModuleArticles] = useState([]);
+  const [articlesLoading, setArticlesLoading] = useState(false);
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [imageStage, setImageStage] = useState(0);
 
@@ -176,6 +165,40 @@ export default function CourseDetails() {
     loadCourseDetails();
   }, [loadCourseDetails]);
 
+  useEffect(() => {
+    let ignore = false;
+
+    if (!course?.id || course?.slug !== ADVANCED_QUANTUM_SLUG) {
+      setModuleArticles([]);
+      return undefined;
+    }
+
+    setArticlesLoading(true);
+    blogService
+      .getBlogs({ course: course.id, ordering: "title", page_size: 50 })
+      .then((response) => {
+        if (ignore) return;
+        const articles = unwrapList(response.data)
+          .filter((blog) => blog.slug?.startsWith(MODULE_ARTICLE_SLUG_PREFIX) || blog.slug === PROJECT_ARTICLE_SLUG)
+          .sort((left, right) => {
+            if (left.slug === PROJECT_ARTICLE_SLUG) return 1;
+            if (right.slug === PROJECT_ARTICLE_SLUG) return -1;
+            return String(left.slug || "").localeCompare(String(right.slug || ""));
+          });
+        setModuleArticles(articles);
+      })
+      .catch(() => {
+        if (!ignore) setModuleArticles([]);
+      })
+      .finally(() => {
+        if (!ignore) setArticlesLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [course?.id, course?.slug]);
+
   const isPurchased = Boolean(course?.is_purchased);
   const description = String(course?.description || "");
   const previewDescription = parseDescriptionPreview(description, descriptionExpanded);
@@ -194,19 +217,33 @@ export default function CourseDetails() {
     return moduleLines.length > 0 ? moduleLines : DEFAULT_CURRICULUM;
   }, [description]);
 
-  const learningOutcomes = HARD_CODED_LEARNING_OUTCOMES;
-  const capstone = HARD_CODED_CAPSTONE;
+  const learningOutcomes = Array.isArray(course?.learning_outcomes) ? course.learning_outcomes : [];
+  const careerOpportunities = Array.isArray(course?.career_opportunities) ? course.career_opportunities : [];
+
+  const sectionImages = useMemo(() => getCourseSectionImages(course), [course]);
 
   const imageCandidates = useMemo(() => {
-    const candidates = [getCourseImageUrl(course)].filter(Boolean);
-    const unique = [];
-    for (const candidate of candidates) {
-      if (!unique.includes(candidate)) {
-        unique.push(candidate);
+    const candidates = [];
+    const heroImageUrl = getCourseHeroImageUrl(course);
+    if (heroImageUrl) {
+      candidates.push(heroImageUrl);
+    }
+
+    for (const image of sectionImages) {
+      if (image?.url && !candidates.includes(image.url)) {
+        candidates.push(image.url);
       }
     }
-    return unique;
-  }, [course]);
+
+    if (!candidates.length) {
+      const fallbackImageUrl = getCourseImageUrl(course);
+      if (fallbackImageUrl) {
+        candidates.push(fallbackImageUrl);
+      }
+    }
+
+    return candidates;
+  }, [course, sectionImages]);
 
   const imageUrl = imageCandidates[imageStage] || "";
   const showImage = Boolean(imageUrl);
@@ -282,6 +319,8 @@ export default function CourseDetails() {
                         {durationLabel}
                       </span>
                     ) : null}
+                    {course.level ? <span className="meta-pill">{course.level}</span> : null}
+                    {course.language ? <span className="meta-pill">{course.language}</span> : null}
                   </div>
                   <div className="course-hero-image-wrap">
                     {showImage ? (
@@ -289,6 +328,10 @@ export default function CourseDetails() {
                         src={imageUrl}
                         alt={course.title}
                         className="course-hero-image"
+                        loading="eager"
+                        decoding="async"
+                        width="800"
+                        height="450"
                         onError={() => setImageStage((stage) => Math.min(stage + 1, imageCandidates.length))}
                       />
                     ) : (
@@ -332,6 +375,33 @@ export default function CourseDetails() {
                     </ul>
                   </article>
 
+                  {course.slug === ADVANCED_QUANTUM_SLUG ? (
+                    <article className="course-details-panel">
+                      <div className="course-section-heading">
+                        <div>
+                          <h2>Module articles</h2>
+                          <p>Read the separated module articles for this Advanced Quantum Computing course.</p>
+                        </div>
+                        <Link to="/blog" className="btn btn-muted">
+                          View Blog
+                        </Link>
+                      </div>
+                      {articlesLoading ? (
+                        <p className="course-muted-text">Loading module articles...</p>
+                      ) : moduleArticles.length > 0 ? (
+                        <div className="course-module-articles-grid">
+                          {moduleArticles.map((article) => (
+                            <BlogCard key={article.slug || article.id} blog={article} />
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="course-muted-text">
+                          Module articles will appear here after the blog content is imported.
+                        </p>
+                      )}
+                    </article>
+                  ) : null}
+
                   {learningOutcomes.length > 0 ? (
                     <article className="course-details-panel">
                       <h2>Learning outcomes</h2>
@@ -346,11 +416,11 @@ export default function CourseDetails() {
                     </article>
                   ) : null}
 
-                  {capstone.length > 0 ? (
+                  {careerOpportunities.length > 0 ? (
                     <article className="course-details-panel">
-                      <h2>Capstone project</h2>
+                      <h2>Career opportunities</h2>
                       <ul className="details-list">
-                        {capstone.map((item) => (
+                        {careerOpportunities.map((item) => (
                           <li key={item}>
                             <HiOutlineDocumentText />
                             <span>{item}</span>

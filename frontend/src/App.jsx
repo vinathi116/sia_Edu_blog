@@ -17,6 +17,10 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
+const BlogHome = lazy(() => import("./pages/blog/BlogHome"));
+const BlogDetails = lazy(() => import("./pages/blog/BlogDetails"));
+const ManageBlogs = lazy(() => import("./admin/ManageBlogs"));
+
 const AdminDashboard = lazy(() => import("./admin/AdminDashboard"));
 const AdminProfile = lazy(() => import("./admin/Profile"));
 const ManageCourses = lazy(() => import("./admin/ManageCourses"));
@@ -48,6 +52,10 @@ export default function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/course/:id" element={<CourseDetails />} />
+        <Route path="/blog" element={<BlogHome />} />
+        <Route path="/blog/:id" element={<BlogDetails />} />
+        <Route path="/blogs" element={<BlogHome />} />
+        <Route path="/blogs/:id" element={<BlogDetails />} />
         <Route
           path="/billing/:courseId"
           element={
@@ -150,6 +158,14 @@ export default function App() {
           element={
             <ProtectedRoute adminOnly>
               <AdminQuiz />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/blogs"
+          element={
+            <ProtectedRoute adminOnly>
+              <ManageBlogs />
             </ProtectedRoute>
           }
         />

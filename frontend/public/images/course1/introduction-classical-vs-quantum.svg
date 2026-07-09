@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#f5f7fb"/>
+  <rect x="90" y="140" width="460" height="360" rx="24" fill="#ffffff" stroke="#3ddcff" stroke-width="3"/>
+  <rect x="650" y="140" width="460" height="360" rx="24" fill="#ffffff" stroke="#7b61ff" stroke-width="3"/>
+  <rect x="160" y="220" width="180" height="180" rx="20" fill="#0f2540"/>
+  <rect x="770" y="220" width="180" height="180" rx="20" fill="#7b61ff"/>
+  <circle cx="250" cy="310" r="52" fill="#3ddcff"/>
+  <path d="M860 260 L920 320 L860 380" stroke="#3ddcff" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="140" y="95" fill="#07111f" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Classical vs Quantum</text>
+</svg>

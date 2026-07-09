@@ -1,8 +1,7 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-from urllib.parse import urlsplit
-from urllib.parse import unquote
+from urllib.parse import parse_qsl, urlencode, urlsplit, unquote
 
 from dotenv import load_dotenv
 from django.core.exceptions import ImproperlyConfigured
@@ -63,6 +62,13 @@ def _database_from_url(database_url: str) -> dict:
     if not parsed.hostname or not db_name:
         raise ImproperlyConfigured("DATABASE_URL must include host and database name.")
 
+    options = {}
+    if parsed.hostname and "supabase.co" in parsed.hostname:
+        query_params = dict(parse_qsl(parsed.query, keep_blank_values=True))
+        if query_params.get("sslmode", "").lower() != "require":
+            query_params["sslmode"] = "require"
+        options["sslmode"] = "require"
+
     return {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": db_name,
@@ -71,10 +77,15 @@ def _database_from_url(database_url: str) -> dict:
         "HOST": parsed.hostname,
         "PORT": str(parsed.port or 5432),
         "CONN_MAX_AGE": 60,
+        **({"OPTIONS": options} if options else {}),
     }
 
 
-LOCAL_FRONTEND_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173"]
+LOCAL_FRONTEND_ORIGINS = [
+    "http://localhost:5173", "http://127.0.0.1:5173",
+    "http://localhost:5174", "http://127.0.0.1:5174",
+    "http://localhost:5175", "http://127.0.0.1:5175",
+]
 RENDER_FRONTEND_ORIGINS = ["https://siasoftwareinnovationseducation.onrender.com"]
 DEFAULT_CORS_ORIGINS = [*LOCAL_FRONTEND_ORIGINS, *RENDER_FRONTEND_ORIGINS]
 DEFAULT_CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000", "http://localhost:8000", *DEFAULT_CORS_ORIGINS]
@@ -137,6 +148,7 @@ INSTALLED_APPS = [
     "analytics",
     "deleted_records",
     "chatbot",
+    "blog",
 ]
 
 MIDDLEWARE = [
@@ -172,31 +184,25 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DB_ENGINE = os.getenv("DB_ENGINE", "django.db.backends.postgresql")
 DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
-if DATABASE_URL:
+USE_LOCAL_SQLITE = os.getenv("USE_LOCAL_SQLITE", "False").lower() == "true"
+
+sqlite_config = {
+    "ENGINE": "django.db.backends.sqlite3",
+    "NAME": BASE_DIR / "db.sqlite3",
+}
+
+if USE_LOCAL_SQLITE:
     DATABASES = {
-        "default": _database_from_url(DATABASE_URL)
+        "default": sqlite_config,
     }
-elif DB_ENGINE == "django.db.backends.sqlite3":
+elif DATABASE_URL:
     DATABASES = {
-        "default": {
-            "ENGINE": DB_ENGINE,
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+        "default": _database_from_url(DATABASE_URL),
+        "local_sqlite": sqlite_config,
     }
 else:
     DATABASES = {
-        "default": {
-            "ENGINE": DB_ENGINE,
-            "NAME": os.getenv("DB_NAME", "SIA_EDU"),
-            "USER": os.getenv("DB_USER", "postgres"),
-            "PASSWORD": os.getenv("DB_PASSWORD", "postgres"),
-            "HOST": os.getenv("DB_HOST", "127.0.0.1"),
-            "PORT": os.getenv("DB_PORT", "5432"),
-            "CONN_MAX_AGE": 60,
-            "OPTIONS": {
-                "sslmode": "require",
-            },
-        }
+        "default": sqlite_config,
     }
 
 AUTH_USER_MODEL = "accounts.User"
@@ -224,7 +230,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = 'static/'
+STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DJANGO_LOG_LEVEL = os.getenv("DJANGO_LOG_LEVEL", "INFO").upper()
@@ -256,6 +262,7 @@ LOGGING = {
 }
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+DJANGO_SERVE_MEDIA = os.getenv("DJANGO_SERVE_MEDIA", "False").lower() == "true"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

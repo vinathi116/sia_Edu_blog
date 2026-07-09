@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Agentic AI autonomous agents illustration</title>
+  <desc id="desc">Autonomous AI agents coordinate planning, tools, memory, and actions.</desc>
+  <defs><radialGradient id="bg" cx="50%" cy="50%" r="70%"><stop stop-color="#12316a"/><stop offset=".5" stop-color="#061326"/><stop offset="1" stop-color="#020617"/></radialGradient><filter id="g"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <g filter="url(#g)">
+    <circle cx="640" cy="360" r="92" fill="#0b1730" stroke="#60a5fa" stroke-width="4"/>
+    <text x="640" y="350" text-anchor="middle" fill="#e0f2fe" font-family="Sora, Arial" font-size="30" font-weight="700">Agent</text>
+    <text x="640" y="386" text-anchor="middle" fill="#93c5fd" font-family="Plus Jakarta Sans, Arial" font-size="18">planner</text>
+    <g fill="#0f213f" stroke="#38bdf8" stroke-width="3">
+      <rect x="170" y="130" width="220" height="120" rx="20"/><rect x="890" y="130" width="220" height="120" rx="20"/>
+      <rect x="170" y="470" width="220" height="120" rx="20"/><rect x="890" y="470" width="220" height="120" rx="20"/>
+    </g>
+    <g stroke="#93c5fd" stroke-width="5" fill="none" stroke-linecap="round"><path d="M390 190L550 315"/><path d="M890 190L730 315"/><path d="M390 530L550 405"/><path d="M890 530L730 405"/><path d="M640 268V120M640 452v148"/></g>
+    <g fill="#e0f2fe" font-family="Sora, Arial" font-size="25" font-weight="700"><text x="230" y="202">Tools</text><text x="940" y="202">Memory</text><text x="222" y="542">Policy</text><text x="940" y="542">Action</text></g>
+  </g>
+</svg>

@@ -6,8 +6,9 @@ import {
   HiOutlineCalendarDays,
   HiOutlineShoppingBag,
 } from "react-icons/hi2";
-import { getCourseImageUrl } from "../data/courseImages";
+import { getCourseImageUrl, DEFAULT_COURSE_IMAGE_URL } from "../data/courseImages";
 import { getCourseStartLabel } from "../data/featuredCourse";
+import { isBackendMediaUrl } from "../utils/media";
 
 function getHighlightedTitle(title, query) {
   const normalizedQuery = String(query || "").trim();
@@ -24,7 +25,7 @@ function getHighlightedTitle(title, query) {
 }
 
 export default function CourseCard({ course, searchQuery, onBuy, onOpen }) {
-  const imageUrl = getCourseImageUrl(course);
+  const imageUrl = getCourseImageUrl(course) || DEFAULT_COURSE_IMAGE_URL;
   const logoPlaceholder = (import.meta.env.VITE_WEBSITE_LOGO_URL || "").trim();
   const discountPercent = Number(course.discount_percent || 0);
   const hasDiscount = discountPercent > 0;
@@ -88,6 +89,7 @@ export default function CourseCard({ course, searchQuery, onBuy, onOpen }) {
               {durationLabel}
             </span>
           ) : null}
+          {course.level ? <span className="pill">{course.level}</span> : null}
           {hasDiscount && (
             <span className="pill pill-discount">
               {discountPercent.toFixed(0)}% OFF
@@ -127,16 +129,31 @@ export default function CourseCard({ course, searchQuery, onBuy, onOpen }) {
 function CourseImage({ imageUrl, placeholderUrl, title }) {
   const [imageFailed, setImageFailed] = useState(false);
   const [placeholderFailed, setPlaceholderFailed] = useState(false);
+  const srcSet = imageUrl && !isBackendMediaUrl(imageUrl)
+    ? `${imageUrl.replace(/(\.[^.]+)$/, "-480$1")} 480w, ${imageUrl.replace(/(\.[^.]+)$/, "-800$1")} 800w, ${imageUrl.replace(/(\.[^.]+)$/, "-1200$1")} 1200w`
+    : undefined;
 
   return (
     <div className="course-image-wrap">
       {imageUrl && !imageFailed ? (
-        <img src={imageUrl} alt={title} className="course-image" onError={() => setImageFailed(true)} />
+        <img
+          src={imageUrl}
+          alt={title}
+          className="course-image"
+          loading="lazy"
+          decoding="async"
+          {...(srcSet ? { srcSet, sizes: "(max-width: 600px) 100vw, 400px" } : {})}
+          width={800}
+          height={450}
+          onError={() => setImageFailed(true)}
+        />
       ) : placeholderUrl && !placeholderFailed ? (
         <img
           src={placeholderUrl}
           alt="SIA Software Innovations logo"
           className="course-image placeholder-logo"
+          loading="lazy"
+          decoding="async"
           onError={() => setPlaceholderFailed(true)}
         />
       ) : (

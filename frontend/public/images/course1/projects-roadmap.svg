@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#07111f"/>
+  <path d="M210 540 L330 420 L450 480 L570 300 L690 360 L900 220" stroke="#3ddcff" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <circle cx="210" cy="540" r="22" fill="#3ddcff"/>
+  <circle cx="330" cy="420" r="22" fill="#7b61ff"/>
+  <circle cx="450" cy="480" r="22" fill="#3ddcff"/>
+  <circle cx="570" cy="300" r="22" fill="#7b61ff"/>
+  <circle cx="690" cy="360" r="22" fill="#3ddcff"/>
+  <circle cx="900" cy="220" r="22" fill="#7b61ff"/>
+  <text x="150" y="95" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Project Roadmap</text>
+</svg>

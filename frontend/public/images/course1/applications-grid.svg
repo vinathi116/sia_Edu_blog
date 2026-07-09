@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#f5f7fb"/>
+  <rect x="120" y="160" width="240" height="180" rx="20" fill="#0f2540"/>
+  <rect x="480" y="160" width="240" height="180" rx="20" fill="#3ddcff"/>
+  <rect x="840" y="160" width="240" height="180" rx="20" fill="#7b61ff"/>
+  <rect x="120" y="380" width="240" height="180" rx="20" fill="#7b61ff"/>
+  <rect x="480" y="380" width="240" height="180" rx="20" fill="#0f2540"/>
+  <rect x="840" y="380" width="240" height="180" rx="20" fill="#3ddcff"/>
+  <text x="150" y="95" fill="#07111f" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Applications Across Industries</text>
+</svg>

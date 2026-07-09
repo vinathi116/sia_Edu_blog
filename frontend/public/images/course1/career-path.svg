@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#f5f7fb"/>
+  <rect x="140" y="180" width="250" height="320" rx="24" fill="#0f2540"/>
+  <rect x="470" y="180" width="250" height="320" rx="24" fill="#3ddcff"/>
+  <rect x="800" y="180" width="250" height="320" rx="24" fill="#7b61ff"/>
+  <text x="150" y="95" fill="#07111f" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Quantum Career Paths</text>
+</svg>

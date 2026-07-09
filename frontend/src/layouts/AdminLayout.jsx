@@ -6,6 +6,7 @@ import {
   HiOutlineCreditCard,
   HiOutlineBookOpen,
   HiOutlineAcademicCap,
+  HiOutlineDocumentText,
   HiOutlinePresentationChartBar,
   HiOutlineSquares2X2,
   HiOutlineUserCircle,
@@ -60,6 +61,10 @@ export default function AdminLayout({ children }) {
           <NavLink to="/admin/quiz" className="nav-link-item">
             <HiOutlineAcademicCap />
             Quizz
+          </NavLink>
+          <NavLink to="/admin/blogs" className="nav-link-item">
+            <HiOutlineDocumentText />
+            Manage Blogs
           </NavLink>
         </aside>
         <section className="dashboard-content">

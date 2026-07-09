@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#07111f"/>
+  <path d="M180 520 L1020 520" stroke="#3ddcff" stroke-width="10"/>
+  <circle cx="240" cy="520" r="22" fill="#3ddcff"/>
+  <circle cx="480" cy="520" r="22" fill="#7b61ff"/>
+  <circle cx="720" cy="520" r="22" fill="#3ddcff"/>
+  <circle cx="960" cy="520" r="22" fill="#7b61ff"/>
+  <rect x="190" y="240" width="150" height="120" rx="16" fill="#0f2540"/>
+  <rect x="430" y="220" width="150" height="140" rx="16" fill="#1b3b5e"/>
+  <rect x="670" y="240" width="150" height="120" rx="16" fill="#0f2540"/>
+  <rect x="910" y="220" width="150" height="140" rx="16" fill="#1b3b5e"/>
+  <text x="150" y="95" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Quantum History Timeline</text>
+</svg>

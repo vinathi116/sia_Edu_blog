@@ -4,6 +4,7 @@ import {
   HiArrowRightOnRectangle,
   HiBars3,
   HiOutlineAcademicCap,
+  HiOutlineBookOpen,
   HiOutlineHome,
   HiOutlineMoon,
   HiOutlineSun,
@@ -113,6 +114,10 @@ export default function Navbar() {
           <NavLink to="/" className="nav-link-item" onClick={closeMenu}>
             <HiOutlineHome />
             Home
+          </NavLink>
+          <NavLink to="/blog" className="nav-link-item" onClick={closeMenu}>
+            <HiOutlineBookOpen />
+            Blog
           </NavLink>
           {!isAuthenticated && (
             <NavLink to="/login" className="nav-link-item" onClick={closeMenu}>
