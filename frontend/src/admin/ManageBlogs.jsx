@@ -329,7 +329,7 @@ export default function ManageBlogs() {
               <Field label="Series Name" value={form.series_name} onChange={(series_name) => setForm((prev) => ({ ...prev, series_name }))} placeholder="e.g. Advanced Quantum Computing" />
               <Field label="Series Order" type="number" value={form.series_order} onChange={(series_order) => setForm((prev) => ({ ...prev, series_order: parseInt(series_order) || 0 }))} />
               <Field label="Reading Time" value={`${estimatedReadTime} min read`} onChange={() => {}} readOnly />
-              <Field label="Short Description / Meta Description" value={form.subtitle} onChange={(subtitle) => setForm((prev) => ({ ...prev, subtitle }))} />
+              <Field label="Subtitle / Meta Description" value={form.subtitle} onChange={(subtitle) => setForm((prev) => ({ ...prev, subtitle }))} maxLength={320} />
               <div>
                 <label>Publish Status</label>
                 <select value={form.status} onChange={(e) => setForm((prev) => ({ ...prev, status: e.target.value }))}>

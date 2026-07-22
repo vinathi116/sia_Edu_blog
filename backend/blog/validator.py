@@ -51,20 +51,6 @@ def validate_metadata(metadata: dict) -> list[str]:
     if tags is not None and not isinstance(tags, list):
         errors.append("Field 'tags' must be a list")
 
-    # 5. Check FAQ structure
-    faq = metadata.get("faq")
-    if faq is not None:
-        if not isinstance(faq, list):
-            errors.append("Field 'faq' must be a list of Q&A objects")
-        else:
-            for index, item in enumerate(faq):
-                if not isinstance(item, dict) or "q" not in item or "a" not in item:
-                    errors.append(
-                        f"FAQ item at index {index} must contain 'q' and 'a' keys"
-                    )
-
-    return errors
-
 
 def lint_content(body: str) -> list[str]:
     """

@@ -8,7 +8,7 @@ import {
 } from "react-icons/hi2";
 
 import PageTransition from "../../components/PageTransition";
-import CourseCard from "../../components/CourseCard";
+
 import MainLayout from "../../layouts/MainLayout";
 import { API_BASE_URL } from "../../services/api";
 import { blogService } from "../../services/blogService";
@@ -26,7 +26,7 @@ const ComponentRegistry = {
   diagram: CSSDiagram,
   comparison: ComparisonTable,
   statistic: StatisticCard,
-  "course-cta": CourseCTA,
+
   newsletter: NewsletterCTA,
 };
 
@@ -205,8 +205,6 @@ export default function BlogDetails() {
             <main className="blog-article-content">
               <MarkdownBlocks blocks={renderedBlocks} headings={headings} course={blog.course} navigate={navigate} />
 
-              {blog.course ? <CourseCTA course={blog.course} navigate={navigate} /> : null}
-
               <nav className="blog-prev-next" aria-label="Article navigation">
                 {blog.previous ? <AdjacentLink label="Previous" blog={blog.previous} icon={<HiOutlineArrowLeft />} /> : <span />}
                 {blog.next ? <AdjacentLink label="Next" blog={blog.next} icon={<HiOutlineArrowRight />} next /> : <span />}
@@ -240,39 +238,6 @@ function BlogSidebar({ headings, activeHeadingId, showMobileTOC, setShowMobileTO
           </section>
         ) : null}
 
-        {blog.series_navigation && (
-          <section className="blog-sidebar-card series-navigator">
-            <div className="series-navigator-header">
-              <span className="series-kicker">Series Progress</span>
-              <strong className="series-title">{blog.series_navigation.series_name}</strong>
-            </div>
-            <div className="series-steps">
-              {blog.series_navigation.articles.map((article) => {
-                let marker = "□";
-                let className = "series-step-upcoming";
-                if (article.is_current) {
-                  marker = "▶";
-                  className = "series-step-current";
-                } else if (article.completed) {
-                  marker = "✓";
-                  className = "series-step-completed";
-                }
-                return (
-                  <div key={article.slug} className={`series-step ${className}`}>
-                    <span className="series-step-marker">{marker}</span>
-                    {article.is_current ? (
-                      <span className="series-step-text">{article.title}</span>
-                    ) : (
-                      <Link to={`/blog/${article.slug}`} className="series-step-link">
-                        {article.title}
-                      </Link>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        )}
       </aside>
 
       {headings.length ? (
@@ -453,26 +418,6 @@ function ComparisonTable({ content }) {
   );
 }
 
-function CourseCTA({ course, navigate }) {
-  if (!course) return null;
-  return (
-    <section className="related-course-cta">
-      <div className="cta-content">
-        <h2>Ready to Build Real Projects?</h2>
-        <p>
-          Master this subject through structured lessons, industry projects, mentorship, and portfolio-ready assignments with the <strong>{course.title}</strong>.
-        </p>
-      </div>
-      <CourseCard
-        course={course}
-        hidePrice={true}
-        ctaText="Explore Course"
-        onOpen={() => navigate(`/course/${course.id}`)}
-        onBuy={() => navigate(`/course/${course.id}`)}
-      />
-    </section>
-  );
-}
 
 function NewsletterCTA() {
   const [email, setEmail] = useState("");
